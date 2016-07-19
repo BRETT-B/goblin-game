@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="shortcut icon" href="" />
+	<title>Goblin Hunter</title>
+</head>
+<body>
+
+<script>
+// Create 'canvas' tag with JavaScript	
+var canvas = document.createElement('canvas');
+// Create a context for JS to play inside of
+var context = canvas.getContext('2d');
+// Give the canvas tag some substance
+canvas.width=512;
+canvas.height=480;
+// Put the canvas element in the document
+document.body.appendChild(canvas);
+var bgImage = new Image();
+bgImage.src = "background.png";
+
+var hero = new Image();
+hero.src = "hero.png";
+var heroLocation = {
+	x: 100,
+	y: 100
+}
+var goblin = new Image();
+goblin.src = "monster.png";
+var goblinLocation = {
+	x: Math.floor(Math.random() * 492),
+	y: Math.floor(Math.random() * 460)
+}
+// This array will hold the keycodes that currently pressed dowm
+var keysDown = [];
+// Make the hero move
+addEventListener('keydown', function(event){
+	keysDown[event.keyCode] = true;
+});
+addEventListener('keyup', function(event){
+	delete keysDown[event.keyCode];
+});
+
+function update(){
+	if(37 in keysDown){
+		if(heroLocation.x > 20){
+			heroLocation.x -= 10;
+		}
+	}
+	if(39 in keysDown){
+		if(heroLocation.x < 460){
+			heroLocation.x += 10;
+		}
+	}
+	if(38 in keysDown){
+		if(heroLocation.y > 20){
+			heroLocation.y -= 10;
+		}
+	}
+	if(40 in keysDown){
+		if(heroLocation.y < 428){
+			heroLocation.y += 10;
+		}
+	}
+	
+	
+	if((heroLocation.x <= goblinLocation.x + 32)
+		&& (heroLocation.y <= goblinLocation.y + 32)
+		&& (goblinLocation.x <= heroLocation.x + 32)
+		&& (goblinLocation.y <= heroLocation.y + 32)) {
+				goblinLocation.x = Math.floor(Math.random() * 492);
+				goblinLocation.y = Math.floor(Math.random() * 460);	
+	}
+		
+}
+
+// Left: 37, Up: 38, Right: 39, Down: 40 
+function draw(){
+	update();
+	// This is where JS draws our stuff
+	context.drawImage(bgImage, 0, 0);
+	context.drawImage(hero, heroLocation.x, heroLocation.y);
+	context.drawImage(goblin, goblinLocation.x, goblinLocation.y);
+	requestAnimationFrame(draw);
+
+}
+
+draw();
+
+</script>
+	
+</body>
+</html>
